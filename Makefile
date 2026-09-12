@@ -1,14 +1,7 @@
-.PHONY: pdf clean arxiv check
+.PHONY: build check
 
-pdf:
-	latexmk -pdf conway-subprime-proof.tex
-
-clean:
-	latexmk -C
-	rm -f conway-subprime-proof.synctex.gz
-
-arxiv:
-	bash submission/package_arxiv.sh
+build:
+	cd lean && lake build
 
 check:
 	python3 lean/scripts/check.py

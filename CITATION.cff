@@ -1,7 +1,7 @@
 cff-version: 1.2.0
-title: "Golden-ratio growth of Conway's subprime closure"
-message: If you use this paper or the Lean formalization, please cite them as below.
-type: article
+title: "Lean formalization of golden-ratio growth of Conway's subprime closure"
+message: This repository is a Lean 4 supplement to the paper; please cite the paper.
+type: software
 authors:
   - family-names: Popescu
     given-names: Romain
@@ -9,17 +9,12 @@ authors:
     affiliation: "Department of Computer Science, Columbia University"
 date-released: 2026-09-12
 license: Apache-2.0
-url: https://github.com/Renriviera/conway-subprime-golden
-abstract: >-
-  Let s(m) be the Conway subprime function, define x ∘ y = s(x+y), and let
-  C_0 = {1}, C_{n+1} = C_n ∪ (C_n ∘ C_n). We prove the Caragiu–Vicol–Zaki
-  conjecture that |C_{n+1}| / |C_n| tends to the golden ratio.
+repository-code: https://github.com/Renriviera/conway-subprime-golden
 keywords:
+  - Lean
   - Conway subprime function
   - golden ratio
-  - Goldbach-type theorems
   - Hardy–Littlewood circle method
-  - Lean
 preferred-citation:
   type: article
   title: "Golden-ratio growth of Conway's subprime closure"
@@ -27,3 +22,4 @@ preferred-citation:
     - family-names: Popescu
       given-names: Romain
   year: 2026
+  notes: Submitted to arXiv (math.NT) and the Journal of Number Theory.

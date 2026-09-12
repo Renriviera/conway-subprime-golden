@@ -10,11 +10,12 @@ lake build
 `lake build` completes without warnings. Every theorem depends only on the standard axioms
 `propext`, `Classical.choice`, `Quot.sound` (checked with `#print axioms`).
 
-The manuscript is `../conway-subprime-proof.tex`. The formalization follows a lean-friendly
-arrangement of the same analytic ingredients (Siegel–Walfisz and a Vinogradov minor-arc bound)
-rather than a line-by-line transcription of the paper. It follows Mathlib conventions:
-one concept per file, `snake_case` theorem names built from the statement, module docstrings
-with *Main definitions / Main statements*, and no `sorry`.
+This Lake project is the Lean 4 supplement to the paper *Golden-ratio growth of
+Conway's subprime closure* (arXiv `math.NT` and *Journal of Number Theory*). It follows a
+lean-friendly arrangement of the same analytic ingredients (Siegel–Walfisz and a
+Vinogradov minor-arc bound) rather than a line-by-line transcription of the paper. Style:
+Mathlib conventions, one concept per file, `snake_case` theorem names built from the
+statement, module docstrings with *Main definitions / Main statements*, and no `sorry`.
 
 ## Main theorem
 
@@ -139,4 +140,4 @@ frozen copies in `scripts/frozen.json`.
 ## Legacy
 
 `legacy/` contains the first formalization (of the original, pre-revision argument). It is not
-built and is kept only for reference; an identical copy is in `../proof-archive/`.
+built and is kept only for reference.
