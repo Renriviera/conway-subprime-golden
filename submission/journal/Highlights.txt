@@ -1,0 +1,4 @@
+- The cardinality of Conway's subprime closure grows by the golden ratio.
+- Maxima and complete prime prefixes are both asymptotic to c φ^n.
+- The proof uses Goldbach filling and a restricted binary lemma.
+- The main theorem is Lean-checked from Siegel–Walfisz and Vinogradov.

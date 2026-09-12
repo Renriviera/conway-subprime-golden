@@ -1,0 +1,643 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue!45!black,citecolor=blue!45!black,
+  urlcolor=blue!45!black,pdftitle={Conway subprime closure: weaker analytic inputs},
+  pdfauthor={OpenAI Astra; Romain Popescu},
+  pdfsubject={A conditional reduction using prime-scale exceptional sets and proportional prime intervals}}
+\setlist[enumerate]{leftmargin=*,itemsep=0.65em,topsep=0.6em}
+\numberwithin{equation}{section}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\DeclareMathOperator{\lpf}{lpf}
+\DeclareMathOperator{\meas}{meas}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Pp}{\mathbb P}
+\newcommand{\ph}{\varphi}
+\newcommand{\tot}{\phi_{\!E}}
+\newcommand{\ind}{\mathbf 1}
+\newcommand{\ee}[1]{e\!\left(#1\right)}
+\newcommand{\floor}[1]{\lfloor #1\rfloor}
+\newcommand{\ceil}[1]{\lceil #1\rceil}
+\newcommand{\HH}[2]{H_{#1}(#2)}
+\allowdisplaybreaks[2]
+\title{Conway's subprime closure:\\a reduction with weaker analytic inputs}
+\author{OpenAI Astra \and Romain Popescu}
+\date{8 September 2026\\[3pt]\small Research variant: weaker inputs}
+
+
+\begin{document}
+\maketitle
+\vspace{-1.2em}
+
+\section{Problem and scope of the revision}
+
+Let $s(1)=1$, let $s(m)=m$ for prime $m$, and let
+$s(m)=m/\lpf(m)$ for composite $m$. Define
+\[
+ C_0=\{1\},\qquad C_{n+1}=C_n\cup\{s(a+b):a,b\in C_n\},
+ \qquad M_n=\max C_n.
+\]
+Repeated inputs are allowed. Caragiu, Vicol, and Zaki
+\cite[Theorem~1 and Conjecture~3]{CVZ} prove that $\bigcup_n C_n=\N$
+and ask whether $|C_{n+1}|/|C_n|\to\ph=(1+\sqrt5)/2$.
+
+This is a separate revision of the preserved proof. Its purpose is to
+reduce the analytic statements needed for a Lean formalization. We prove
+an explicit \emph{conditional reduction}: ordinary proportional-interval
+prime estimates and restricted binary representation estimates with
+$o(X/\log X)$ exceptions suffice. The full logarithmic savings
+$O_A(X/\log^A X)$, prime estimates in shrinking intervals, and the
+almost-equal-summands theorem are not hypotheses of this reduction.
+The analytic hypotheses below are stated, not formalized or discharged here.
+
+\begin{theorem}\label{thm:weak-main}
+Assume the prime estimates and the two restricted binary hypotheses of
+Section~\ref{sec:inputs}. Then
+\begin{equation}\label{eq:weak-limits}
+ \frac{M_{n+1}}{M_n}\longrightarrow\ph,\qquad
+ \frac{|C_n|}{M_{n-1}}\longrightarrow1,\qquad
+ \frac{|C_{n+1}|}{|C_n|}\longrightarrow\ph,\qquad
+ \frac{|C_n|}{M_n}\longrightarrow\frac1\ph.
+\end{equation}
+Moreover, for each $0<\zeta<1$, every prime at most $(1-\zeta)M_n$
+belongs to $C_n$ for all sufficiently large $n$. Consequently the complete
+prime prefix $Q_n$ of the preserved proof satisfies $Q_n/M_n\to1$.
+\end{theorem}
+
+The revised argument does not assert a positive limit for $M_n/\ph^n$.
+That stronger conclusion is unnecessary for \eqref{eq:weak-limits}.
+The proof is a research draft, not an independently reviewed or fully
+Lean-checked theorem.
+
+\section{Proof overview}
+
+\begin{enumerate}
+\item \textbf{Keep the elementary upper bound.} Composite sums give outputs
+at most the preceding maximum. Parity therefore gives
+$M_{n+1}\le M_n+M_{n-1}$. The weighted quantity
+$W_j=M_{j+1}+M_j/\ph$ grows by at most a factor $\ph$ per generation.
+
+\item \textbf{Propagate a slightly slower prime profile.} Fix
+$\lambda<\ph$, as close to $\ph$ as needed. If complete prime cutoffs
+$L,\lambda L$ are present in consecutive generations, buffered Goldbach
+filling and a prime-counting pigeonhole propagate the cutoffs to
+$\lambda^2L,\lambda^3L,\ldots$. All intervals have fixed proportional
+lengths; no errors need to be summed over generations.
+
+\item \textbf{Increase the profile when a maximum gets ahead.} An available
+prime $t>(1+\delta)L$ gives representations
+$2p+q=2u-t$, with $p,q$ in known prime intervals. Almost every candidate
+prime $u$ is then generated. Pairing these $u$ with integers in a buffered
+filled interval extends a later complete prime cutoff by a fixed amount.
+After three generations the entire two-cutoff profile can be increased
+by a fixed factor $1+\kappa>1$.
+
+\item \textbf{Use a bounded-step comparison.} Compare $W_j$ with the
+weighted profile $(\lambda+\ph^{-1})L$. A normal step increases their
+ratio by at most $\ph/\lambda$. If that ratio is too large, the increase
+of the profile gives a strict contraction within three or four steps.
+Taking $\lambda$ sufficiently close to $\ph$ forces the profile to stay
+close to the maxima, and hence proves approximate prime completeness.
+
+\item \textbf{Take the ratio limit directly.} Prime completeness makes
+the Fibonacci upper bound asymptotically an equality. The resulting
+ratio recurrence is a contraction toward $\ph$. Buffered filling then
+gives $|C_n|\sim M_{n-1}$ and the desired cardinality limit.
+\end{enumerate}
+
+\section{Precisely weakened analytic inputs}\label{sec:inputs}
+
+Let $\Pp$ be the set of primes. All logarithms are natural; all integer
+counts in real intervals use their intersection with $\N$. Put
+\[
+ \mathcal L(X)=X/\log X\quad(X>1),\qquad
+ \operatorname{Pref}(j,L)\ :\Longleftrightarrow\
+       \forall p\in\Pp,\ p\le L\Longrightarrow p\in C_j,
+\]
+\[
+ H_j(Y)=\#\bigl(\{1,\ldots,\floor Y\}\setminus C_j\bigr).
+\]
+The notation $f(X)=o(\mathcal L(X))$ means
+$f(X)/\mathcal L(X)\to0$ as $X\to\infty$.
+
+\paragraph{Prime estimates.}
+We use only the following consequences of the ordinary prime number theorem:
+for each fixed $0<\alpha<\beta$ there is $c_{\alpha,\beta}>0$ such that
+\begin{equation}\label{eq:prime-lower}
+ \#(\Pp\cap[\alpha X,\beta X])
+ \ge c_{\alpha,\beta}\mathcal L(X)
+ \quad\text{for all sufficiently large }X,
+\end{equation}
+and
+\begin{equation}\label{eq:prime-density}
+ \pi(X)=o(X).
+\end{equation}
+In particular, for each fixed $0<\rho<1$ and sufficiently large $L$,
+\begin{equation}\label{eq:prefix-max}
+ \operatorname{Pref}(j,L)\Longrightarrow
+          M_j\ge(1-\rho)L.
+\end{equation}
+Indeed \eqref{eq:prime-lower} supplies a prime in $[(1-\rho)L,L]$.
+The threshold is independent of $j$. These estimates do not involve a
+prime-number-theorem error term.
+
+\paragraph{Restricted binary hypotheses.}
+For $\nu\in\{1,2\}$ and fixed $0<\alpha<\beta$, $0<\gamma<\delta_1$,
+$\eta>0$, $B>0$, define
+\[
+ I_X=[\alpha X,\beta X],\quad J_X=[\gamma X,\delta_1X],\quad
+ \mathcal J_{\nu,X}(N)=\meas\{v\in I_X:N-\nu v\in J_X\}.
+\]
+Let $E_\nu(X)$ count the integers $N$ satisfying
+\[
+ 1\le N\le BX,\qquad N\equiv\nu+1\pmod2,\qquad
+ \mathcal J_{\nu,X}(N)\ge\eta X,
+\]
+which have no representation $N=\nu p+q$ with primes $p\in I_X$, $q\in J_X$.
+The hypothesis, separately for $\nu=1$ and $\nu=2$, is
+\begin{equation}\label{eq:binary-weak}
+ E_\nu(X)=o(\mathcal L(X)).
+\end{equation}
+Every interval parameter is fixed before the limit is taken. We assume no
+uniform rate as those parameters vary. In the proof only finitely many
+intervals are needed after fixing the desired accuracy.
+
+\begin{remark}\label{rem:rate-distinction}
+The rate in \eqref{eq:binary-weak} is strictly stronger than density zero,
+which says $E_\nu(X)=o(X)$. For example, the primes have density zero but
+number $\asymp X/\log X$. An exceptional set of that size can contain
+\emph{every} prime candidate in one of our pigeonholes. Nor does an
+unrestricted Goldbach representation theorem by itself provide a
+representation with summands in specified intervals. Thus a theorem stated
+only as \texttt{DensityZero} for unrestricted Goldbach exceptions is not
+a direct substitute for \eqref{eq:binary-weak}.
+\end{remark}
+
+\section{Buffered filling and propagation}
+
+\begin{lemma}[Buffered filling]\label{lem:buffer}
+Assume \eqref{eq:binary-weak} for $\nu=1$. For every fixed $0<\theta<1$
+there is a function $e_\theta(X)\to0$ such that, for all sufficiently large
+$X$ and every $j$,
+\begin{equation}\label{eq:buffer}
+ \operatorname{Pref}(j,X)\Longrightarrow
+ H_{j+1}((1-\theta)X)\le e_\theta(X)\mathcal L(X).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+For a scale $Y$, take both prime intervals to be
+$[(1-\theta)Y/4,Y]$. If $(1-\theta)Y/2\le m\le(1-\theta)Y$,
+the real overlap for $2m=p+q$ is at least
+\[
+ \eta_\theta Y,\qquad
+ \eta_\theta=\min\bigl((1-\theta)/2,2\theta\bigr)>0.
+\]
+To check this, write $a=(1-\theta)Y/4$. The overlap of
+$[a,Y]$ and $[2m-Y,2m-a]$ has length
+$\min(2m-2a,2Y-2m,Y-a)$, and each of these three terms is at least
+$\eta_\theta Y$ in the stated range.
+Thus \eqref{eq:binary-weak} with $B=2$ gives at most
+$e(Y)Y/\log Y$ exceptional midpoints, for a function $e(Y)\to0$.
+Every other midpoint $m\ge2$ is generated by $s(p+q)=s(2m)=m$
+once every prime up to $Y$ is present.
+
+Apply this at the scales $Y_r=X/2^r$ with $Y_r\ge\sqrt X$.
+Their midpoint ranges cover all of
+$[\sqrt X,(1-\theta)X]$ except possibly a bottom interval of length
+$O(\sqrt X)$. More explicitly the union starts below $\sqrt X$,
+since the last scale is less than $2\sqrt X$.
+Also $\sum_rY_r\le2X$ and $\log Y_r\ge\tfrac12\log X$. Hence
+\[
+ \sum_r e(Y_r)\frac{Y_r}{\log Y_r}
+ \le 4\sup_{Y\ge\sqrt X}e(Y)\frac{X}{\log X}
+ =o(\mathcal L(X)).
+\]
+The omitted $O(\sqrt X)$ integers are also $o(\mathcal L(X))$.
+Under $\operatorname{Pref}(j,X)$ every scale uses available primes.
+The bounds depend on $X,\theta$, not on $j$, proving the uniform assertion.
+\end{proof}
+
+\begin{lemma}[Proportional extension]\label{lem:prop-extension}
+Fix $0<\epsilon<1$ and $B\ge1$. For sufficiently large $Y$, if
+$Y\le X\le BY$, $\operatorname{Pref}(j,Y)$ and
+$\operatorname{Pref}(j+1,X)$, then
+\begin{equation}\label{eq:prop-extension}
+ \operatorname{Pref}\bigl(j+2,(1-\epsilon)(X+Y)\bigr).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Only a prime $r$ with $X<r\le(1-\epsilon)(X+Y)$ needs attention;
+if this range is empty the assertion follows by retention. For each prime
+$p\in[(1-\epsilon)X,X]$, the positive integer $a=r-p$ is at most
+$(1-\epsilon)Y$. The candidates $a$ are distinct. There are
+$\gg_\epsilon X/\log X$ candidates by \eqref{eq:prime-lower}, but
+only $o(Y/\log Y)=o(X/\log X)$ missing integers in that buffered range
+of $C_{j+1}$, by Lemma~\ref{lem:buffer} and $Y\le X\le BY$.
+Some $a$ is present; $p$ is present by the second prefix hypothesis.
+Since $r$ is prime, $s(p+a)=r\in C_{j+2}$.
+\end{proof}
+
+\section{A finite increase of a prime profile}\label{sec:boost}
+
+Fix for this section
+\begin{equation}\label{eq:parameters}
+ 0<\delta\le\frac1{10},\qquad \frac85\le\lambda<\ph,\qquad
+ \epsilon=1-\frac{\lambda^2}{\lambda+1},\qquad
+ a=\frac{\delta}{100},\quad b=\frac{\delta}{8},\quad
+ \kappa=\frac{(1-\epsilon)b}{\lambda^4}.
+\end{equation}
+Then $0<\epsilon\le1/65$ and
+\begin{equation}\label{eq:lambda-recursion}
+ \lambda^2=(1-\epsilon)(\lambda+1).
+\end{equation}
+A \emph{profile at $(j,L)$} means
+$\operatorname{Pref}(j,L)$ and $\operatorname{Pref}(j+1,\lambda L)$.
+Lemma~\ref{lem:prop-extension} implies that a profile propagates to
+$(j+1,\lambda L)$, and hence to $(j+r,\lambda^rL)$ for every $r\ge0$,
+once $L$ exceeds a fixed threshold. All ratios of adjacent cutoffs here
+are $\lambda<2$.
+
+\begin{lemma}[Increase of the profile]\label{lem:boost}
+For the fixed parameters \eqref{eq:parameters} there is a threshold $L_0$
+such that, uniformly in $j$, a profile at $(j,L)$ with $L\ge L_0$ and
+\begin{equation}\label{eq:outlier-condition}
+ M_j>(1+\delta)L
+\end{equation}
+produces a profile at
+\begin{equation}\label{eq:boosted-pair}
+ \bigl(j+3,(1+\kappa)\lambda^3L\bigr).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The elementary facts used here are proved in Lemma~\ref{lem:elementary}
+below. Choose the first index $i$ for which $M_i>(1+\delta)L$.
+For large $L$, $i\ge1$, and \eqref{eq:outlier-condition} implies $i\le j$.
+The bound $M_i\le2M_{i-1}$ gives an available odd prime
+\begin{equation}\label{eq:t-range}
+ t=M_i\in C_j,\qquad 1+\delta<t/L\le2+2\delta.
+\end{equation}
+It is odd once $L$ is large because $t>2$.
+
+Choose a finite set of real numbers $\mathcal T$ such that every
+$\tau\in[1+\delta,2+2\delta]$ is within $a/4$ of some $T\in\mathcal T$,
+and all its members lie in
+$[1+\delta-a/4,2+2\delta+a/4]$. A grid of mesh at most $a/2$
+suffices. Select $T$ with $|t/L-T|\le a/4$, and put
+\begin{equation}\label{eq:boost-intervals}
+ \begin{aligned}
+ I_L&=[(\lambda-2a)L,(\lambda-a)L],\\
+ J_L&=[(1-5a)L,(1-a/2)L],\\
+ U_{T,L}&=[(\lambda+(T+1)/2-3a)L,
+            (\lambda+(T+1)/2-5a/2)L].
+ \end{aligned}
+\end{equation}
+These are fixed positive intervals after $\lambda,\delta,T$ are chosen.
+Every prime in $I_L$ belongs to $C_{j+1}$ and every prime in $J_L$
+belongs to $C_j$.
+
+For an integer $u\in U_{T,L}$, the target $N=2u-t$ is odd. For every
+real $p\in I_L$, the value $q=2u-t-2p$ satisfies
+\begin{equation}\label{eq:q-boost-range}
+ (1-17a/4)L\le q\le(1-3a/4)L.
+\end{equation}
+Indeed the endpoint bounds before using $|T-t/L|\le a/4$ are
+$(1-4a+T-t/L)L$ and $(1-a+T-t/L)L$.
+The interval in \eqref{eq:q-boost-range} lies inside $J_L$, so the
+real overlap for $2p+q=N$ has length $aL$.
+Also $0<N\le6L$ for large $L$: the endpoint coefficients for $N$
+lie between $2\lambda+1-25a/4$ and $2\lambda+1-19a/4$,
+and $8/5\le\lambda<5/3$, $a\le1/1000$.
+
+Apply \eqref{eq:binary-weak} with $\nu=2$, $\eta=a$, $B=6$.
+There are only finitely many $T$, so the maximum of their error functions
+still tends to zero. The injective map $u\mapsto2u-t$ shows that all but
+$o(L/\log L)$ integers $u\in U_{T,L}$ admit the required prime representation,
+uniformly over $j,t,T$. If such a $u$ is itself prime, then
+\begin{equation}\label{eq:boost-operations}
+ \frac{t+q}{2}=s(t+q)\in C_{j+1},\qquad
+ u=p+\frac{t+q}{2}=s\left(p+\frac{t+q}{2}\right)\in C_{j+2}.
+\end{equation}
+Here $t,q$ are odd primes, so their sum is composite with least prime
+factor $2$. We have proved
+\begin{equation}\label{eq:u-exceptions}
+ \#\bigl((\Pp\cap U_{T,L})\setminus C_{j+2}\bigr)
+       =o(L/\log L).
+\end{equation}
+
+We next show that every prime up to $(\lambda^3+b)L$ belongs to $C_{j+3}$.
+Ordinary propagation already supplies every prime at most $\lambda^3L$.
+Let $r$ be a prime in the remaining range
+$[\lambda^3L,(\lambda^3+b)L]$, and let $u\in\Pp\cap U_{T,L}$.
+For $v=r-u$, the endpoint calculations give
+\begin{equation}\label{eq:v-boost-range}
+ \frac12 L\le v\le(\lambda-11\delta/32)L
+                     <(\lambda-\delta/4)L.
+\end{equation}
+For the upper bound, use $T\ge1+\delta-a/4$ and
+$\lambda^3-2\lambda-1\le0$ for $8/5\le\lambda\le\ph$:
+\begin{align*}
+ v/L
+ &\le\lambda^3+b-\lambda-(T+1)/2+3a\\
+ &\le\lambda+b-\delta/2+25a/8
+ =\lambda-11\delta/32.
+\end{align*}
+For the lower bound, $\lambda^3-\lambda\ge312/125$ and
+$T\le2+2\delta+a/4$ yield
+\[
+ v/L\ge\lambda^3-\lambda-(T+1)/2+5a/2
+ \ge\frac{249}{250}-\delta+\frac{19a}{8}
+ \ge\frac{112}{125}>\frac12.
+\]
+The two polynomial bounds follow because $x^3-2x-1$ and $x^3-x$
+are increasing for $x\ge8/5$, and $\ph^3-2\ph-1=0$.
+
+Use Lemma~\ref{lem:buffer} with prime cutoff $\lambda L$ in $C_{j+1}$
+and buffer $\theta=\delta/(4\lambda)$. It bounds the missing integers
+of $C_{j+2}$ up to $(\lambda-\delta/4)L$ by $o(L/\log L)$.
+There are $\gg_{\lambda,\delta,T}L/\log L$ prime candidates in $U_{T,L}$,
+whose length is $aL/2$. Exclude those missing by \eqref{eq:u-exceptions}
+and those with $r-u\notin C_{j+2}$. The latter exclusion is bounded by
+the buffered hole count because $u\mapsto r-u$ is injective.
+A candidate remains. Its two inputs generate $r$ in $C_{j+3}$.
+The thresholds are uniform in $r$, so this proves the entire asserted prefix.
+
+At time $j+2$ the ordinary prefix is $\lambda^2L$; at time $j+3$ the
+improved prefix is $(\lambda^3+b)L$. Their ratio is less than $2$.
+One more application of Lemma~\ref{lem:prop-extension} gives prefix
+\[
+ (1-\epsilon)(\lambda^3+b+\lambda^2)L
+   =\bigl(\lambda^4+(1-\epsilon)b\bigr)L
+   =(1+\kappa)\lambda^4L
+\]
+at time $j+4$. At time $j+3$ the improved cutoff also exceeds
+$(1+\kappa)\lambda^3L$, since
+$\kappa\lambda^3=(1-\epsilon)b/\lambda\le b$.
+These are exactly the two cutoffs in \eqref{eq:boosted-pair}.
+\end{proof}
+
+\section{The bounded-step comparison}
+
+\begin{lemma}[Elementary upper bounds]\label{lem:elementary}
+For $n\ge1$, $M_n$ is prime and
+\begin{equation}\label{eq:elementary}
+ C_n\subseteq[1,M_{n-1}]\cup\Pp,\qquad
+ M_{n+1}\le M_n+M_{n-1},\qquad M_n\le2M_{n-1}.
+\end{equation}
+With $W_j=M_{j+1}+M_j/\ph$ we have $W_{j+1}\le\ph W_j$.
+\end{lemma}
+
+\begin{proof}
+A composite sum of two inputs at most $M_{n-1}$ gives an output at most
+$M_{n-1}$. Any new element above that maximum is therefore prime.
+Since $M_1=2$ and $M_2=3$, all maxima from $M_1$ on are prime, and all
+from $M_2$ on are odd. Every even element of $C_n$ for $n\ge2$ is at
+most $M_{n-1}$, including the even prime $2$. A new maximum at time
+$n+1$ is an odd prime formed from an odd and an even input, so it is
+at most $M_n+M_{n-1}$. The case $n=1$ is $3\le2+1$; a retained
+maximum also satisfies the inequality. Monotonicity gives
+$M_n\le2M_{n-1}$, with the first case checked directly. Finally
+\[
+ W_{j+1}\le M_{j+1}+M_j+M_{j+1}/\ph
+ =\ph M_{j+1}+M_j=\ph W_j.
+\]
+\end{proof}
+
+\begin{proposition}[Approximate prime completeness]\label{prop:prefix-close}
+For each $0<\zeta<1$, $\operatorname{Pref}(n,(1-\zeta)M_n)$ holds for
+all sufficiently large $n$.
+\end{proposition}
+
+\begin{proof}
+Fix $0<\delta\le1/10$ and make the explicit choice
+\[
+ \lambda=\ph-\frac{\delta}{100}\left(\ph-\frac85\right).
+\]
+Then $8/5\le\lambda<\ph$. With the parameters of \eqref{eq:parameters},
+this choice satisfies
+\begin{equation}\label{eq:choose-lambda}
+ A_0:=\frac\ph\lambda>1,\qquad A_0^5\le1+\delta,\qquad
+ \rho:=\frac{A_0^4}{1+\kappa}<1.
+\end{equation}
+Here is a direct verification. Since $8/5<\ph<5/3$, the number
+$y=A_0-1$ satisfies $0<y\le\delta/2400<1/100$.
+Expanding powers gives $(1+y)^4\le1+5y$ and
+$(1+y)^5\le1+6y$ for $0\le y\le1/100$.
+Also $1-\epsilon\ge1/2$ and $\lambda^4<8$, so
+$\kappa\ge\delta/128$. Therefore
+$A_0^4\le1+\delta/480<1+\kappa$ and
+$A_0^5\le1+\delta/400\le1+\delta$, as required.
+Only this fixed $\lambda$ is used in the rest of the argument.
+
+Take $L$ beyond all thresholds in the propagation and increase lemmas,
+and beyond the threshold for \eqref{eq:prefix-max} with accuracy $\delta$.
+Exhaustion gives a $j$ with $[1,\ceil{\lambda L}]\subseteq C_j$,
+so there is a profile at $(j,L)$. For any profile, define
+\[
+ Z(j,L)=\frac{M_{j+1}+M_j/\ph}{(\lambda+1/\ph)L}.
+\]
+A normal one-step propagation satisfies
+\begin{equation}\label{eq:normal-Z}
+ Z(j+1,\lambda L)\le A_0 Z(j,L).
+\end{equation}
+If $Z(j,L)>1+\delta$, at least one of
+\[
+ M_j>(1+\delta)L,\qquad M_{j+1}>(1+\delta)\lambda L
+\]
+holds; otherwise their weighted sum contradicts the strict inequality
+for $Z$. In the first case Lemma~\ref{lem:boost} gives an increased
+profile after $h=3$ steps. In the second case perform one normal step
+and then use that lemma, giving an increased profile after $h=4$ steps.
+In either case the new pair is
+$(j+h,(1+\kappa)\lambda^hL)$ and
+\begin{equation}\label{eq:boost-Z}
+ Z\bigl(j+h,(1+\kappa)\lambda^hL\bigr)
+ \le\frac{A_0^h}{1+\kappa}Z(j,L)\le\rho Z(j,L).
+\end{equation}
+
+Construct a sequence of profiles as follows. If $Z\le1+\delta$, take
+one normal step; if $Z>1+\delta$, take the increase of length $3$ or $4$
+just described. All scales increase, so all thresholds remain valid.
+The generation indices increase by integers between $1$ and $4$ and
+hence tend to infinity. There is a profile in this sequence with
+$Z\le1+\delta$: otherwise \eqref{eq:boost-Z} would give
+$Z_m\le\rho^mZ_0\to0$, contradicting $Z_m>1+\delta$.
+After the first such profile, every subsequent selected profile satisfies
+\begin{equation}\label{eq:node-bound}
+ Z\le A_0(1+\delta).
+\end{equation}
+This is an induction: a normal step starts with $Z\le1+\delta$ and
+uses \eqref{eq:normal-Z}; an increase contracts the preceding bound.
+
+We must also control generations between selected profiles. From a
+selected pair $(j,L)$, normal propagation supplies a profile
+$(j+r,\lambda^rL)$ at every intermediate index. For $0\le r<h\le4$,
+\[
+ Z(j+r,\lambda^rL)\le A_0^r Z(j,L)
+ \le A_0^5(1+\delta)\le(1+\delta)^2.
+\]
+(The exponent $5$ is a harmless upper bound.) Therefore, at every
+sufficiently large index $n$, there is an $L_n$ such that
+\begin{equation}\label{eq:all-stage-profile}
+ \operatorname{Pref}(n,L_n),\qquad
+ \operatorname{Pref}(n+1,\lambda L_n),\qquad
+ Z(n,L_n)\le(1+\delta)^2.
+\end{equation}
+These scales tend to infinity: selected scales grow by at least $\lambda$
+per elapsed generation and intermediate scales are their corresponding
+normal propagations.
+
+By \eqref{eq:prefix-max}, $M_{n+1}\ge(1-\delta)\lambda L_n$.
+Solving the last inequality of \eqref{eq:all-stage-profile} for $M_n$ gives
+\begin{align*}
+ \frac{M_n}{L_n}
+ &\le(1+\delta)^2(\ph\lambda+1)-(1-\delta)\ph\lambda\\
+ &=1+(2\delta+\delta^2)(\ph\lambda+1)+\delta\ph\lambda
+ \le1+12\delta.
+\end{align*}
+For the last inequality, use $\delta\le1/10$,
+$\ph\lambda<3$, and $\ph\lambda+1<4$; the excess is at most
+$(2.1\cdot4+3)\delta=11.4\delta$.
+It follows that $\operatorname{Pref}(n,M_n/(1+12\delta))$ holds eventually.
+Given $0<\zeta<1$, choose $0<\delta\le\min(1/10,\zeta/24)$.
+Since $1/(1+12\delta)\ge1-12\delta\ge1-\zeta$, this proves the proposition.
+\end{proof}
+
+\section{Ratios and cardinalities without positive amplitudes}
+
+\begin{proof}[Proof of Theorem~\ref{thm:weak-main}]
+Exhaustion implies $M_n\to\infty$. Fix $0<\zeta<1$. Proposition~\ref{prop:prefix-close}
+gives consecutive prime cutoffs
+$X=(1-\zeta)M_n$ and $Y=(1-\zeta)M_{n-1}$ for all large $n$.
+They satisfy $Y\le X\le2Y$. Lemma~\ref{lem:prop-extension}, with
+$\epsilon=\zeta$, gives every prime up to
+$(1-\zeta)^2(M_n+M_{n-1})$ in $C_{n+1}$.
+Using \eqref{eq:prefix-max} once more,
+\[
+ (1-\zeta)^3(M_n+M_{n-1})\le M_{n+1}\le M_n+M_{n-1}
+\]
+for all sufficiently large $n$. Since $\zeta$ is arbitrary,
+\begin{equation}\label{eq:fib-saturation}
+ \frac{M_{n+1}}{M_n+M_{n-1}}\longrightarrow1.
+\end{equation}
+
+Put $r_n=M_{n+1}/M_n$. By \eqref{eq:elementary}, $1\le r_n\le2$.
+Equation~\eqref{eq:fib-saturation} implies
+$r_n=1+1/r_{n-1}+e_n$, where $e_n\to0$: explicitly $e_n$ is
+$1+1/r_{n-1}$ times the difference between the quotient in
+\eqref{eq:fib-saturation} and $1$, and that multiplier is at most $2$.
+Since $\ph=1+1/\ph$,
+\[
+ |r_n-\ph|\le\frac{|r_{n-1}-\ph|}{\ph r_{n-1}}+|e_n|
+ \le\ph^{-1}|r_{n-1}-\ph|+|e_n|.
+\]
+The finite number $D=\limsup_n|r_n-\ph|$ satisfies $D\le\ph^{-1}D$,
+and hence $D=0$. Thus $r_n\to\ph$.
+
+For the cardinality, again fix $0<\zeta<1$. Prime completeness and
+Lemma~\ref{lem:buffer} show
+\[
+ H_n((1-\zeta)^2M_{n-1})=o(M_{n-1}/\log M_{n-1}).
+\]
+Consequently
+\[
+ \liminf_n\frac{|C_n|}{M_{n-1}}\ge(1-\zeta)^2.
+\]
+The upper structural bound and \eqref{eq:prime-density} give
+\[
+ |C_n|\le M_{n-1}+\pi(M_n)
+       \le M_{n-1}+\pi(2M_{n-1})=M_{n-1}+o(M_{n-1}).
+\]
+Letting $\zeta\downarrow0$ proves $|C_n|/M_{n-1}\to1$.
+Taking successive quotients gives the third limit in \eqref{eq:weak-limits},
+and dividing by $M_n/M_{n-1}\to\ph$ gives the fourth.
+
+Finally, prefix completeness and \eqref{eq:prime-lower} imply
+$Q_n\ge(1-\zeta)^2M_n$ eventually, for every $0<\zeta<1$;
+indeed choose a prime between $(1-\zeta)^2M_n$ and $(1-\zeta)M_n$.
+Together with $Q_n\le M_n$, this proves $Q_n/M_n\to1$.
+\end{proof}
+
+\appendix
+\section{Why the old summability argument cannot simply be weakened}
+
+The previous proof constructs cutoffs with relative losses summable along
+exponentially growing scales, and deduces a \emph{positive} limiting
+amplitude. Little-$o$ relative losses need not be summable. For example,
+\[
+ x_n=\frac{\ph^n}{n+3}
+\]
+is increasing and obeys the Fibonacci upper bound. For $n\ge1$, writing
+$m=n+3$, direct calculation gives
+\[
+ \frac{x_n+x_{n-1}-x_{n+1}}{x_n}
+   =\frac1{\ph(m-1)}+\frac\ph{m+1}=O(1/n)\longrightarrow0.
+\]
+Nevertheless $x_n/\ph^n=1/(n+3)\to0$. This example explains why
+asymptotic Fibonacci saturation does not itself give a positive amplitude.
+Our bounded-step proof obtains saturation first and then proves the ratio
+limit directly, avoiding any such amplitude claim.
+
+\section{Analytic and formalization boundary}
+
+The two restricted hypotheses \eqref{eq:binary-weak} are of the same
+fixed-interval type, with coefficients $(1,1)$ and $(2,1)$. Buffered
+filling is derived from the first one, rather than imported as a
+Conway-specific consequence of an almost-equal-primes theorem.
+
+The preserved proof's circle-method appendix treats $(2,1)$ with stronger
+logarithmic savings, using \cite[Proposition~24]{Tao} and
+\cite[Lemma~1]{Kumchev}. The parallel $(1,1)$ calculation uses $S_I(\theta)$
+instead of $S_I(2\theta)$ and even targets. Its major-arc coefficient is
+$\mu(q)^2/\tot(q)^2$, and its real integral is
+$\meas\{v\in I_X:N-v\in J_X\}$. For even $N$, the factor at $2$
+is again $2$: now $c_2(N)=1$, and the coefficient for $q=2r$ equals
+the odd-$r$ coefficient. All odd-prime local factors are the same as
+in that appendix. Thus the standard analytic estimates there also give
+the stronger fixed-interval $(1,1)$ result, and hence the weaker input
+used here. This observation identifies the classical analytic source;
+it is not a claim that either restricted theorem is already available
+as a proved Lean declaration.
+
+For a Lean implementation the revised target can be organized around
+$\operatorname{Pref}(j,L)$ alone: neither $Q_n$ nor a first missing prime
+is needed for the main ratio argument. The substantive new combinatorial
+lemma is Lemma~\ref{lem:boost}; the new real-sequence argument is the
+finite-step comparison in Proposition~\ref{prop:prefix-close}.
+Natural-density-zero errors alone remain outside this reduction.
+A proof using only those weaker errors would need an additional argument
+showing that they cannot concentrate on the prime candidates.
+
+\begin{thebibliography}{9}
+\bibitem{CVZ}
+M. Caragiu, P. A. Vicol, and M. Zaki,
+\href{https://www.fq.math.ca/Papers1/55-4/CaragiuVicolZaki03162017.pdf}
+{On Conway's subprime function, a covering of $\N$ and an unexpected
+appearance of the golden ratio},
+\emph{The Fibonacci Quarterly} \textbf{55} (2017), no.~4, 327--331.
+\bibitem{Tao}
+T. Tao,
+\href{https://terrytao.wordpress.com/2015/03/30/254a-notes-8-the-hardy-littlewood-circle-method-and-vinogradovs-theorem/}
+{254A, Notes 8: The Hardy--Littlewood circle method and Vinogradov's theorem},
+30 March 2015, especially Proposition~24.
+\bibitem{Kumchev}
+A. V. Kumchev,
+\href{https://tigerweb.towson.edu/akumchev/a23.pdf}
+{On sums of primes from Beatty sequences},
+\emph{Integers} \textbf{8} (2008), Article A08; Lemma~1.
+\end{thebibliography}
+\end{document}

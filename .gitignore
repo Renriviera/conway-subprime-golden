@@ -1,0 +1,36 @@
+# Lean build artifacts and Mathlib checkout
+lean/.lake/
+**/*.olean
+**/*.ilean
+**/*.trace
+**/.lake/
+
+# LaTeX auxiliaries (keep the compiled paper PDF)
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+*.idx
+*.ilg
+*.ind
+*.nav
+*.snm
+*.vrb
+
+# OS / editor
+.DS_Store
+*.swp
+*~
+
+# Local scratch
+tmp/
+output/
+
+# Generated arXiv bundle
+submission/arxiv/arxiv-upload.tar.gz
+submission/arxiv/staging/

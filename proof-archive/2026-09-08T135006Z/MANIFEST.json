@@ -1,0 +1,91 @@
+{
+  "saved_at_utc": "2026-09-08T135006Z",
+  "purpose": "Preserved baseline before investigating weaker analytic inputs. This snapshots the current proof draft and Lean reduction; it does not certify independent mathematical verification.",
+  "files": [
+    {
+      "path": "conway-subprime-proof.tex",
+      "sha256": "cb89cdc93a1c8b7ec4ffdb71c031c76c87c27a74a1b83a20b5b795e0a1c89b44",
+      "bytes": 36892
+    },
+    {
+      "path": "conway.cpp",
+      "sha256": "686b698fe47a0fc73ba15cce84e1c1c0bf23c6f6883597c099ba3d29359169f1",
+      "bytes": 3858
+    },
+    {
+      "path": "experiment.txt",
+      "sha256": "ee568f5907039fb8a5473d06b20d41837e7535ec524f6aaa56c9dcecdeebd01f",
+      "bytes": 1837
+    },
+    {
+      "path": "lean/ConwayGolden/Analytic.lean",
+      "sha256": "52ccb0f26917a761a15c377d97534d0343e381a46b83e8419d35632e1a11fa93",
+      "bytes": 4043
+    },
+    {
+      "path": "lean/ConwayGolden/Asymptotic.lean",
+      "sha256": "123b30d0d8c8f3eec8d9a76c0d99ccf2ecfe494b319798ed7fd7cfb0bd630037",
+      "bytes": 7076
+    },
+    {
+      "path": "lean/ConwayGolden/Basic.lean",
+      "sha256": "bea8dad125c7a47e492c7ca73fdf7a496f4b0fd8a247aa6486ef0f4c64710bec",
+      "bytes": 15704
+    },
+    {
+      "path": "lean/ConwayGolden/Combinatorial.lean",
+      "sha256": "c132bf0eb7197d763451430f9f4b861aa3dd76b6afb2a3ee9ee5d69651cfca56",
+      "bytes": 5406
+    },
+    {
+      "path": "lean/ConwayGolden/Deduction.lean",
+      "sha256": "228bda244b2e659c6c3ab714ba4c4d6852d6f59dd451e76c14b1f70a716e995d",
+      "bytes": 7398
+    },
+    {
+      "path": "lean/ConwayGolden/Main.lean",
+      "sha256": "b9531723875ff111eacbabcbc1a84c672b58ed725c831bbb6a71c30dafa01d4e",
+      "bytes": 6813
+    },
+    {
+      "path": "lean/ConwayGolden.lean",
+      "sha256": "7c84cb52863bcf4aa9a096bcdd5aead99abfaa87f29024dea3e17672e18e98ca",
+      "bytes": 175
+    },
+    {
+      "path": "lean/README.md",
+      "sha256": "55e253ea9feb749650577ed10613440c9aab76c3387adec042debbeca69ef489",
+      "bytes": 2392
+    },
+    {
+      "path": "lean/lake-manifest.json",
+      "sha256": "6adb23d5db96052543834e0ded1b310ec5c971a04d950fa4c5e0ebee244a6c6a",
+      "bytes": 3146
+    },
+    {
+      "path": "lean/lakefile.toml",
+      "sha256": "d1fd30389007ef6f7daf1cbaeb8a33381e5af0ca88e29c99c76a61ee86589ef3",
+      "bytes": 169
+    },
+    {
+      "path": "lean/lean-toolchain",
+      "sha256": "3aac669c7a910ec2389f4e4f921b605adf6ebf2d1e0c9b9cd0be4d33f3f5db71",
+      "bytes": 25
+    },
+    {
+      "path": "output/pdf/conway-subprime-proof.pdf",
+      "sha256": "6d6345c94eb114e8d3fe0265ef00f35cbe4fbac771aa1949b793256f5e93b5e1",
+      "bytes": 331896
+    },
+    {
+      "path": "prime-completeness.md",
+      "sha256": "ea5b1d06d6a733af08bc2e1746e9378a00fae313deb4db9a9739dfc4926b160a",
+      "bytes": 16430
+    },
+    {
+      "path": "research.md",
+      "sha256": "2a6ea35a562ad29e87459cc7790f018aa88801643517f87875bdf7375c8c9c31",
+      "bytes": 14083
+    }
+  ]
+}
