@@ -1,9 +1,9 @@
 # Lean formalization: golden-ratio growth of Conway's subprime closure
 
-This repository is a **Lean 4 supplement** to the paper
+This repository is a **Lean 4 supplement** to the preprint
 
 > Romain Popescu, *Golden-ratio growth of Conway's subprime closure*,
-> submitted to arXiv (`math.NT`) and the *Journal of Number Theory*.
+> [arXiv:2609.14188](https://arxiv.org/abs/2609.14188) (`math.NT`); also submitted to the *Journal of Number Theory*.
 
 It is not the manuscript. The paper is the citable source for the theorem; this tree is the machine-checked companion, also intended as arXiv ancillary material and as a journal code supplement.
 
@@ -50,7 +50,7 @@ in `lean/ConwayGolden/Subprime/StandardMain.lean`. See [`lean/README.md`](lean/R
 
 The manuscript proves the same limit, with an appendix that uses Siegel–Walfisz / Vinogradov-type exponential-sum estimates for a restricted binary representation lemma. This development uses those same two inputs, then checks a lean-friendly arrangement of the generation dynamics (buffered filling, Fibonacci-scale profiles). It is not a line-by-line transcription of the TeX.
 
-Once the arXiv identifier is assigned, record it here and in `CITATION.cff`.
+Preprint: [arXiv:2609.14188](https://arxiv.org/abs/2609.14188).
 
 ## License
 

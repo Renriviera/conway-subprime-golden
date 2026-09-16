@@ -10,8 +10,8 @@ lake build
 `lake build` completes without warnings. Every theorem depends only on the standard axioms
 `propext`, `Classical.choice`, `Quot.sound` (checked with `#print axioms`).
 
-This Lake project is the Lean 4 supplement to the paper *Golden-ratio growth of
-Conway's subprime closure* (arXiv `math.NT` and *Journal of Number Theory*). It follows a
+This Lake project is the Lean 4 supplement to the preprint *Golden-ratio growth of
+Conway's subprime closure* ([arXiv:2609.14188](https://arxiv.org/abs/2609.14188); *Journal of Number Theory*). It follows a
 lean-friendly arrangement of the same analytic ingredients (Siegel–Walfisz and a
 Vinogradov minor-arc bound) rather than a line-by-line transcription of the paper. Style:
 Mathlib conventions, one concept per file, `snake_case` theorem names built from the

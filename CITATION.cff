@@ -22,4 +22,9 @@ preferred-citation:
     - family-names: Popescu
       given-names: Romain
   year: 2026
-  notes: Submitted to arXiv (math.NT) and the Journal of Number Theory.
+  url: https://arxiv.org/abs/2609.14188
+  identifiers:
+    - type: other
+      value: "arXiv:2609.14188"
+      description: arXiv preprint
+  notes: Preprint on arXiv (math.NT); submitted to the Journal of Number Theory.
