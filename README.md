@@ -3,7 +3,7 @@
 This repository is a **Lean 4 supplement** to the preprint
 
 > Romain Popescu, *Golden-ratio growth of Conway's subprime closure*,
-> [arXiv:2609.14188](https://arxiv.org/abs/2609.14188) (`math.NT`); also submitted to the *Journal of Number Theory*.
+> [arXiv:2609.14188](https://arxiv.org/abs/2609.14188) (`math.NT`); also submitted to *Research in Number Theory*.
 
 It is not the manuscript. The paper is the citable source for the theorem; this tree is the machine-checked companion, also intended as arXiv ancillary material and as a journal code supplement.
 
